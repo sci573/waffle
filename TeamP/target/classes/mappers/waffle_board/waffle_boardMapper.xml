@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="board">
+
+	<!-- 게시판 글(레코드) 전체 갯수 -->
+	<select id="countArticle" resultType="int">
+		select count(*) 
+		from wf_board 
+		<include refid="search" />
+	</select>
+
+	<!-- 게시판 글 전체 리스트 -->
+	<select id="listAll" resultType="com.example.TeamP.model.wfBoard.dto.WaffleBoardDTO">
+		<!-- search기능까지 -->
+		<include refid="paging_header" />
+			select bno,title,writer,regdate,viewcnt
+  				,(select count(*) from wf_b_reply where bno=b.bno) cnt					
+			from wf_board b
+			<include refid="search" />
+			order by bno desc 
+		<include refid="paging_footer" />
+	</select>
+	
+	<sql id="paging_header">
+		select *
+		from (
+		    select rownum as rn, A.*
+		    from (
+	</sql>
+	<sql id="paging_footer">
+		    ) A
+		) where rn between #{start} and #{end}	
+	</sql>
+	<!-- 검색기능, sql태그는 다른 태그에 끼워넣을 수 있는 기능을 가지고 있음. -->
+	<sql id="search">
+		<choose>
+			<when test="search_option != 'all' ">
+				where ${search_option} like #{keyword}
+			</when>
+			<otherwise>
+				where writer like #{keyword} 
+					or title like #{keyword} 
+					or content like #{keyword}
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<!-- 조회수 증가 처리 -->
+	<update id="increateViewcnt">
+		update wf_board set viewcnt=viewcnt+1
+		where bno=#{bno}
+	</update>
+	
+	<!-- 레코드 조회 -->
+	<select id="read" resultType="com.example.TeamP.model.wfBoard.dto.WaffleBoardDTO">
+		select bno,title,writer,content,regdate,viewcnt 
+		from wf_board 
+		where bno=#{bno}
+	</select>
+	
+	<!-- 글작성 -->
+	<insert id="insert">
+		insert into wf_board (bno,title,content,writer) values
+		((select nvl(max(bno)+1,1) from wf_board), #{title}, #{content}, #{writer})
+	</insert>
+	
+	<!-- 글수정 (날짜도 업데이트 되도록 설정 - sysdate가 아닌 systimestamp를 사용해야 시,분,초 모두 업데이트가 된다) -->
+	<update id="update">
+		update wf_board
+		set title=#{title}, content=#{content}, regdate=systimestamp
+		where bno=#{bno}
+	</update>
+	
+	<!-- 글삭제 -->
+	<delete id="delete">
+		delete from wf_board where bno=#{bno}
+	</delete>
+	
+	<!-- 글삭제 전 해당 글의 모든 댓글 삭제 -->
+	<delete id="delete_re">
+		delete from wf_b_reply where bno=#{bno}
+	</delete>
+	
+	<!-- 글삭제 후 게시판 댓글 테이블의 번호 갱신 / 참조 : https://haenny.tistory.com/21 -->
+	<update id="updateReBno" parameterType="java.util.List">
+		<foreach item="bno" index="index" collection="list" separator=";" open="DECLARE BEGIN" close="; END;">
+			update wf_b_reply 
+			set bno=#{bno}-1 
+			where bno=#{bno}
+		</foreach>
+	</update>
+	
+	<!-- 글삭제 후 게시판 테이블의 번호 갱신 / 참조 : https://haenny.tistory.com/21 -->
+	<update id="updateBno" parameterType="java.util.List">
+		<foreach item="bno" index="index" collection="list" separator=";" open="DECLARE BEGIN" close="; END;">
+			update wf_board 
+			set bno=#{bno}-1 
+			where bno=#{bno}
+		</foreach>
+	</update>
+	
+	<!-- 댓글 리스트 -->
+	<select id="listReply" resultType="com.example.TeamP.model.wfBoard.dto.WaffleBoardReplyDTO">
+		select rno, bno, replytext, replyer, regdate
+		from wf_b_reply 
+		where bno=#{bno} 
+		order by regdate
+	</select>
+	
+	<!-- 댓글 입력 -->
+	<insert id="insertReply">
+		insert into wf_b_reply (rno, bno, replytext, replyer) values 
+		((select nvl(max(rno)+1,1) from wf_b_reply), #{bno}, #{replytext}, #{replyer})
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteReply">
+		delete from wf_b_reply 
+		where replyer=#{replyer} and rno=#{rno} and bno=#{bno}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

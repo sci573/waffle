@@ -1,0 +1,63 @@
+package com.example.TeamP.controller.wfUpload;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+@Controller
+public class WfImageUploadController {
+	//로거를 위한 변수처리
+	private static final Logger logger=LoggerFactory.getLogger(WfImageUploadController.class);
+	
+	@RequestMapping("wfImageUpload.do")
+	public void wfImageUpload(HttpServletRequest request, HttpServletResponse response, @RequestParam MultipartFile upload) throws Exception {
+		OutputStream out = null;
+		PrintWriter printWriter = null;
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=utf-8");
+		
+		try {
+			//업로드한 파일 이름
+			String fileName=upload.getOriginalFilename();
+			//파일을 바이트 배열로 변환
+			byte[] bytes=upload.getBytes();
+			//이미지를 업로드할 디렉토리 (work디렉토리의 위치에 따라서 변경해줄 필요가 있음!!)
+			String uploadPath="D:\\work\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\TeamP\\WEB-INF\\views\\images\\";
+			out=new FileOutputStream(new File(uploadPath+fileName));
+			//서버로 업로드
+			out.write(bytes);
+			//클라이언트에 결과 표시
+			String callback=request.getParameter("CKEditorFuncNum");
+			//서버=>클라이언트로 텍스트 전송(자바스크립트로 실행)
+			printWriter=response.getWriter();
+			String fileUrl=request.getContextPath()+"/images/"+fileName;
+			printWriter.println("{\"filename\" : \""+fileName+"\",\"uploaded\" : 1, \"url\":\""+fileUrl+"\"}");
+			printWriter.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(out != null) {
+					out.close();
+				}
+				if(printWriter != null) {
+					printWriter.close();
+				}
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}//finally
+		return;
+	}
+}

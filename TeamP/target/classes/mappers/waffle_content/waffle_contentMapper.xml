@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="content">
+
+	<!-- movie.view -->
+	<!-- movie 전체 컨텐츠 -->
+	<select id="movie" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title 
+		from wf_content
+		where category='영화'
+	</select>
+		
+	<select id="movie_action" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title 
+		from wf_content 
+		where category='영화' and genre='액션'
+	</select>
+	<select id="movie_thriller" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title 
+		from wf_content 
+		where category='영화' and genre='스릴러'
+	</select>
+	<select id="movie_romance" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title 
+		from wf_content 
+		where category='영화' and genre='로맨스'
+	</select>
+	<select id="movie_comedy" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title 
+		from wf_content 
+		where category='영화' and genre='코미디' 
+	</select>
+	<select id="movie_sf" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title
+		from wf_content
+		where category='영화' and genre='SF'
+	</select>
+	
+	<!-- drama.view -->
+	<!-- drama 전체 컨텐츠 -->
+	<select id="drama" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title
+		from wf_content
+		where category='드라마'
+	</select>
+	
+	<select id="drama_action" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title 
+		from wf_content 
+		where category='드라마' and genre='액션'
+	</select>
+	<select id="drama_thriller" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title 
+		from wf_content 
+		where category='드라마' and genre='스릴러'
+	</select>
+	<select id="drama_romance" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title 
+		from wf_content 
+		where category='드라마' and genre='로맨스'
+	</select>
+	<select id="drama_comedy" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title 
+		from wf_content 
+		where category='드라마' and genre='코미디'
+	</select>
+	<select id="drama_sf" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title
+		from wf_content
+		where category='드라마' and genre='SF'
+	</select>
+	
+	<!-- 추천 컨텐츠 리스트의 타이틀 반환 (중복제거를 위한 선 호출) -->
+	<select id="listRecoAll" parameterType="int" resultType="String">
+		select title, poster 
+		from wf_content 
+		where cno=#{cno}
+	</select>
+	
+	<!-- 추천 컨텐츠 리스트 반환 (중복제거 후) -->
+	<select id="listReco" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select title, poster 
+		from wf_content 
+		where title=#{title}
+	</select>
+	
+	<!-- 추천 컨텐츠에 반환될 content 테이블에 입력된 전체 레코드 갯수 -->
+	<select id="countAll" resultType="int">
+		select count(*) 
+		from wf_content
+	</select>
+	
+	<!-- 전체 컨텐츠 리스트 반환 -->
+	<select id="listAll" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select title, poster 
+		from wf_content 
+		order by dbms_random.value
+	</select>
+	
+	<!-- 컨텐츠 디테일 뷰 -->
+	<select id="detail" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select cno, title, genre, category, poster, rated, cast, year, description
+		from wf_content
+		where title=#{title}
+	</select>
+	
+	<!-- 관리자 디테일 뷰 수정 -->
+	<update id="admin_edit">
+		update wf_content
+		set genre=#{genre}, category=#{category}, poster=#{poster}, 
+			rated=#{rated}, cast=#{cast}, year=#{year}, description=#{description}
+		where cno=#{cno} and title=#{title}
+	</update>
+	
+	<!-- 관리자 디테일 뷰 삭제 -->
+	<delete id="admin_delete">
+		delete from wf_content where title=#{title}
+	</delete>
+	
+	<!-- 삭제 후 해당 게시물 번호 가져오기 -->
+	<select id="get_cno" resultType="int">
+		select cno from wf_content where title=#{title}
+	</select>
+	
+	<!-- 삭제 후 번호 갱신 / 참조 : https://haenny.tistory.com/21 -->
+	<update id="updateNum" parameterType="java.util.List">
+		<foreach item="cno" index="index" collection="list" separator=";" open="DECLARE BEGIN" close="; END;">
+			update wf_content 
+			set cno=#{cno}-1 
+			where cno=#{cno}
+		</foreach>
+	</update>
+	
+	<!-- 관리자 디테일 댓글 삭제 -->
+	<delete id="admin_delete_re">
+		delete from wf_reply where title=#{title}
+	</delete>
+	
+	<!-- 관리자 디테일 삽입 -->
+	<update id="admin_insert">
+		insert into wf_content 
+		values ((select nvl(max(cno)+1,1) from wf_content), #{title}, #{genre}, 
+				#{category}, #{poster}, #{rated}, #{cast}, #{year}, #{description})
+	</update>
+	
+	<!-- 댓글 목록 -->
+	<select id="comment_list" resultType="com.example.TeamP.model.wfContent.dto.WaffleCommentDTO">
+		select rno, title, writer, content, reg_date 
+		from wf_reply
+		where title=#{title}
+		order by reg_date
+	</select>
+	
+	<!-- 댓글 추가 -->
+	<insert id="comment_add">
+		insert into wf_reply 
+		(rno, title, writer, content)
+		values ((select nvl(max(rno)+1,1) from wf_reply), #{title}, #{writer}, #{content})
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="comment_dlt">
+		delete from wf_reply 
+		where writer=#{writer} and rno=#{rno} and title=#{title}
+	</delete>
+	
+	<!-- 찜목록 유무 -->
+	<select id="countContent" resultType="int">
+		select count(*) 
+		from wf_favor 
+		where userid=#{userid} and title=#{title}
+	</select>
+	
+	<!-- 검색 기능 (키워드에 맞는 전체 데이터 불러오기) -->
+	<select id="search_all" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title 
+		from wf_content 
+		where title like #{input} or 
+		genre like #{input} or 
+		category like #{input} or 
+		rated like #{input} or 
+		cast like #{input} or 
+		year like #{input}
+	</select>
+	
+	<!-- 검색 기능 (중복 필터링 후 DB 받아오기) -->
+	<select id="search" resultType="com.example.TeamP.model.wfContent.dto.WaffleContentDTO">
+		select poster, title 
+		from wf_content 
+		where title=#{title}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

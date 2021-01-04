@@ -1,0 +1,162 @@
+@charset "UTF-8";
+/* 헤드 파트 */
+#head_wrap {
+	width: 100%;
+	height: auto;
+}
+
+/* 상단바 */
+#head_content {
+	padding: 30px;
+	height: 90px;
+}
+#head_content h1 {
+	display: inline-block;
+	margin: 0 0 0 30px;
+	cursor: pointer;
+}
+#head_content > h1 > a:hover {
+	color: #f3e6ff;
+	text-shadow: 2px 2px 4px #f3e6ff, 0 0 0.1em #f3e6ff;
+}
+
+/* 왼쪽 메뉴 */
+/* ul */
+#left_nav {
+	display: inline-block;
+	margin:0 0 0 35px;
+	list-style:none;
+	vertical-align: top;
+}
+#left_nav li {
+	display: inline-block;
+	font-family: "Unica One", cursive;
+	padding: 15px;
+	font-size: 23px;
+	cursor: pointer;
+}
+#left_nav a:hover {
+	color: #f3e6ff;
+	text-shadow: 2px 2px 5px #f3e6ff;
+}
+
+/* 오른쪽 메뉴 */
+/* ul */
+#right_nav {
+	display: inline-block;
+	list-style:none;
+	float: right;
+	margin-right: 20px;
+}
+#right_nav>li:nth-child(1) {
+	position: relative;
+	display: inline-block;
+	font-family: "Unica One", cursive;
+	padding: 18px;
+	font-size: 20px;
+	cursor: pointer;
+	vertical-align: top;
+}
+#right_nav>li:nth-child(2) {
+	position: relative;
+	display: inline-block;
+	font-family: "Unica One", cursive;
+	padding: 13.5px;
+	font-size: 20px;
+	cursor: pointer;
+	vertical-align: top;
+}
+#right_nav>li:nth-child(2):hover {
+	color: lightgray;
+}
+/* 이름표시 */
+#right_nav p {
+	display: inline-block;
+    margin: 0;
+    padding-left: 6px;
+    vertical-align: super;
+    font-size: 17px;
+    font-family: "맑은 고딕";
+}
+
+/* search 박스 */
+
+.search {
+	position: relative;
+	width: 35px;
+	height: 35px;
+}
+/* hover를 하기 위한 Search(돋보기) 아이콘 */
+.search_1 {
+	z-index: 1;
+}
+/* 검색기능을 위한 Search(돋보기) 아이콘 */
+.search_2 {
+	z-index: -1;
+}
+/* Search(돋보기) 아이콘 */
+.fa-search {
+	color: white;
+	font-size: 30px;
+	transition: all 0.35s ease-in-out;
+	position: absolute;
+}
+/* 입력창 */
+.input {
+	width: 0;
+	box-sizing: border-box;
+	border: 2px solid #ccc;
+	border-radius: 4px;
+	font-size: 16px;
+	background-color: black;
+	color: white;
+	padding: 8px 50px 8px 15px;
+	/* -webkit-transition: width 0.3s ease-in-out; */
+	transition: width 0.35s ease-in-out;
+	position: absolute;
+	z-index: 0;
+	right: -5px;
+	top: -5px;
+	visibility: hidden;
+	opacity: 0;
+}
+/* Search(돋보기) 아이콘에 마우스 올릴 시 */ /* 자바스크립트로 처리함 */
+/* .fa-search:hover {
+	font-size: 25px;
+} */
+
+/* 오른쪽 메뉴 드롭다운 */
+#right_sub_nav {
+	position: absolute;
+	opacity: 0;
+	visibility: hidden;
+	background-color: white;
+	transition: all 0.5s ease-in-out;
+	top: 60px;
+	right: -6px;
+}
+#right_sub_nav li {
+	padding: 5px;
+	border-bottom: 1px solid black;
+	width: 120px;
+	clear: both;
+	display: block;
+	text-align: center;
+}
+#right_sub_nav a {
+	color: black;
+}
+/* 유저 아이콘 */
+.fa-user-circle, #right_sub_nav{padding: 0; margin: 0;}
+
+.fa-user-circle {font-size: 35px;}
+
+/* 이미지에 mouse hover시 */
+#right_nav > li:hover #right_sub_nav {
+	opacity: 1;
+	visibility: visible;
+}
+
+#right_sub_nav > li > a:hover {
+	text-decoration: underline;
+}

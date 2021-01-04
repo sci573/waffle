@@ -1,0 +1,81 @@
+@charset "UTF-8";
+/* 전체 컨텐츠 기본 설정 */
+body {
+	margin: 0;
+	padding: 0;
+	background-color: black;
+    flex-flow: column nowrap; 
+    justify-content: center; 
+    align-items: center; 
+    overflow-x: hidden;
+    background-color: black;
+    color: white;
+}
+a {all:unset; color: white;}
+h1 {
+	font-family: "Unica One";
+    text-align: center;
+    font-size: 60px;
+}
+h2 {
+	margin:20px 0; 
+	color: #ffff80; 
+	font-family: "Rubik", sans-serif;
+}
+ul, li {
+	margin: 0;
+	padding: 0;
+}
+/* 슬라이더 */
+.page-wrapper{
+  padding-bottom : 100px;
+}
+.post-slider{
+  width:75%;
+  margin:0px auto;
+  position:relative;
+}
+.post-slider .slider-title{
+  text-align:center;
+  margin:30px auto;
+}
+.post-slider .next{
+  position:absolute;
+  top:50%;
+  right:-120px;
+  font-size:5em;
+  color:white;
+  cursor: pointer;
+}
+.post-slider .prev{
+  position:absolute;
+  top:50%;
+  left:-120px;
+  font-size:5em;
+  color:white;
+   cursor: pointer;
+}
+.post-slider .post-wrapper{
+  width:100%;
+  margin:0px auto;
+  overflow: hidden;
+  padding:10px 0px 10px 0px;
+}
+.post-slider .post-wrapper .post{
+  width:300px;
+  margin:0px 10px;
+  display:inline-block;
+  border-radius: 5px;
+}
+.post-slider .post-wrapper .post .post-info{
+  font-size:35px; 
+  padding-left:10px;
+  text-align: center;
+  font-family:'Noto Sans KR', sans-serif;
+}
+.post-slider .post-wrapper .post .slider-image{
+  height:600px;
+  width:100%;
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+}

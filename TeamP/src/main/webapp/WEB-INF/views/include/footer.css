@@ -1,0 +1,63 @@
+@charset "UTF-8";
+/* 푸터 파트 */
+footer {
+	margin-top: 150px;
+	border-top: 2px solid gray;
+	font-family: "Unica One", cursive;
+}
+footer h4 {
+	font-size: 30px;
+	margin-bottom: 20px;
+}
+footer h5 {
+	font-size: 15px;
+}
+.container {
+	width: 80%;
+	margin: 0 auto;
+}
+.container div {
+	display: inline-block;
+	box-sizing: content-box;
+	vertical-align: top;
+	margin: 30px auto;
+}
+.container>div:nth-child(1) {
+	width: 40%;
+}
+.container>div:nth-child(2) {
+	width: 15%;
+	float: right;
+	margin-left: 30px;
+}
+.container ul {
+	list-style: none;
+}
+.container li {
+	cursor: pointer;
+}
+.container p, .container a {
+	font-size: 18px;
+	color: lightgray;
+}
+.container li:nth-child(1)>a {
+	font-size: 20px;
+}
+.container a:hover {
+	color: #f3e6ff;
+	font-size: 20px;
+	text-shadow: 1px 1px 1em lightgray;
+}
+.container li:nth-child(1)>a:hover {
+	font-size: 25px;
+}
+.end {
+	clear: both;
+	width: 80%;
+	margin: 0 auto;
+}
+.end div {
+	margin: 50px;
+	box-sizing: content-box;
+	text-align: right;
+}

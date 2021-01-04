@@ -1,0 +1,77 @@
+@charset "UTF-8";
+/* 전체 컨텐츠 기본 설정 */
+body {
+	margin: 0;
+	padding: 0;
+	background-color: black;
+    flex-flow: column nowrap; 
+    justify-content: center; 
+    align-items: center; 
+    overflow-x: hidden;
+    background-color: black;
+    color: white;
+}
+a {all:unset; color: white;}
+h1 {
+	font-family: "Unica One";
+    text-align: center;
+    font-size: 60px;
+}
+h2 {
+	margin:20px 0; 
+	color: #ffff80; 
+	font-family: "Rubik", sans-serif;
+}
+ul, li {
+	margin: 0;
+	padding: 0;
+}
+.page-wrapper{margin: 70px 0;}
+.post-slider{
+  width:95%;
+  margin:30px auto;
+  position:relative;
+  height: 360px;
+}
+.next1,.next2,.next3,.next4,.next5{
+  position:absolute;
+  top:50%;
+  right:-25px;
+  font-size:2em;
+  color:gray;
+  z-index:1;
+   cursor: pointer;
+}
+.prev1,.prev2,.prev3,.prev4,.prev5{
+  position:absolute;
+  top:50%;
+  left: -25px;
+  font-size:2em;
+  color:gray;
+  z-index:1;
+  cursor: pointer;
+}
+.post-slider .post-wrapper{
+  width:100%;
+  margin:0px auto;
+  overflow: hidden;
+  padding:10px 0px 10px 0px;
+}
+.post-slider .post-wrapper .post{
+  width:300px;
+  margin:0px 5px;
+  display:inline-block;
+  border-radius: 5px;
+}
+.post-slider .post-wrapper .post .slider-image{
+  height:300px;
+  width:100%;
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+}
+.post-slider h4{
+	margin: 0;
+    font-family: 'Unica One';
+    letter-spacing: 1px;
+    font-size: 22px;
+}

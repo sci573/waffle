@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="member">
+	<!-- 일반 유저 확인 -->
+	<select id="login_check" parameterType="com.example.TeamP.model.wfMember.dto.WaffleMemberDTO" resultType="String">
+		select name from wf_member
+		where userid=#{userid} and passwd=#{passwd}
+	</select>
+	
+	<!-- 관리자 확인 -->
+	<select id="adminLogin_check" parameterType="com.example.TeamP.model.wfMember.dto.WaffleMemberDTO" resultType="String">
+		select name from wf_admin 
+		where userid=#{userid} and passwd=#{passwd}
+	</select>
+	
+	<!-- 유저 정보 불러오기 -->
+	<select id="viewMember" resultType="com.example.TeamP.model.wfMember.dto.WaffleMemberDTO">
+		select * from wf_member
+		where userid=#{userid}
+	</select>
+	
+	<!-- 관리자 정보 불러오기 -->
+	<select id="viewAdmin" resultType="com.example.TeamP.model.wfMember.dto.WaffleMemberDTO">
+		select * from wf_admin 
+		where userid=#{userid}
+	</select>
+	
+	<insert id="insertWFM">
+		insert into wf_member (userid,passwd,name,email)
+		values (#{userid},#{passwd},#{name},#{email})
+	</insert>
+	
+	<select id="id_check" resultType="String">
+		select userid from wf_member
+		where userid=#{userid}
+	</select>
+	
+	<select id="id_check_admin" resultType="String">
+		select userid from wf_admin
+		where userid=#{userid}
+	</select>
+	
+	<select id="email_check" resultType="String">
+		select email from wf_member
+		where email=#{email}
+	</select>
+	
+	<select id="email_check_admin" resultType="String">
+		select email from wf_admin
+		where email=#{email}
+	</select>
+	
+	<!-- 해당 이메일이 있는 계정 DB에 랜덤 코드 입력 -->
+	<update id="insertCode">
+		update wf_member 
+		set c_code=#{c_code}
+		where email=#{email}
+	</update>
+	
+	<!-- 인증 코드 확인 쿼리 -->
+	<select id="codeCheck" resultType="String">
+		select userid from wf_member
+		where email=#{email} and c_code=#{c_code}
+	</select>
+	
+	<!-- 이메일과 인증 코드에 해당되는 사용자 계정 정보 출력하는 쿼리 -->
+	<select id="infoMember" resultType="com.example.TeamP.model.wfMember.dto.WaffleMemberDTO">
+		select userid, name, email 
+		from wf_member
+		where email=#{email} and c_code=#{c_code}
+	</select>
+	
+	<!-- 이메일 비우기 -->
+	<update id="rollback">
+		update wf_member
+		set email=null
+		where userid=#{userid}
+	</update>
+	
+	<!-- 이메일 원상복구 -->
+	<update id="emailPut">
+		update wf_member 
+		set email=#{email} 
+		where c_code=#{code}
+	</update>
+	
+	<!-- 관리자 계정을 정보 -->
+	<select id="infoWaffleAdmin" resultType="com.example.TeamP.model.wfMember.dto.WaffleMemberDTO">
+		select userid, name, email 
+		from wf_admin 
+		where userid=#{userid} and passwd=#{passwd}
+	</select>
+	
+	<!-- 사용자 계정을 정보 -->
+	<select id="infoWaffleMember2" resultType="com.example.TeamP.model.wfMember.dto.WaffleMemberDTO">
+		select userid, name, email 
+		from wf_member 
+		where userid=#{userid} and passwd=#{passwd}
+	</select>
+	
+	<!-- 관리자 계정을 수정하는 쿼리 -->
+	<select id="updateWFA">
+		update wf_admin 
+		set passwd=#{passwd}, name=#{name}, email=#{email}, c_code=null 
+		where userid=#{userid}
+	</select>
+	
+	<!-- 사용자 계정을 수정하는 쿼리 -->
+	<update id="updateWFM">
+		update wf_member 
+		set passwd=#{passwd}, name=#{name}, email=#{email}, c_code=null 
+		where userid=#{userid}
+	</update>
+	
+	<!-- 회원탈퇴 -->
+	<delete id="deleteWFM">
+		delete from wf_member 
+		where userid=#{userid}
+	</delete>
+	
+	<!-- 회원탈퇴 전 favor삭제 -->
+	<delete id="deleteFavor">
+		delete from wf_favor 
+		where userid=#{userid}
+	</delete>
+	
+	<!-- 회원탈퇴 전 reply삭제 -->
+	<delete id="deleteReply">
+		delete from wf_reply 
+		where writer=#{userid}
+	</delete>
+	
+	<!-- 회원탈퇴 전 board삭제 -->
+	<delete id="deleteBoard">
+		delete from wf_board
+		where writer=#{userid}
+	</delete>
+	
+	<!-- 회원탈퇴 전 board_reply삭제 -->
+	<delete id="deleteBoardRe">
+		delete from wf_b_reply
+		where replyer=#{userid}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

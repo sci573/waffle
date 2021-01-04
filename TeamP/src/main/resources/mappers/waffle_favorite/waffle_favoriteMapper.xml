@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="favor">
+	<!-- 찜 목록 출력 -->
+	<select id="list" resultType="com.example.TeamP.model.wfFavor.dto.WaffleFavorDTO">
+		select m.userid, m.name, c.title, c.poster, f.favor_id
+		from wf_member m, wf_favor f, wf_content c
+		where m.userid=f.userid and
+			  c.title=f.title and
+			  m.userid=#{userid}
+		order by f.favor_id desc
+	</select>
+	
+	<!-- 찜 추가 -->
+	<insert id="insert">
+		insert into wf_favor
+		values (wf_favor_seq.nextval, #{userid}, #{title})
+	</insert>
+	
+	<!-- 찜 삭제 -->
+	<delete id="delete">
+		delete from wf_favor
+		where title=#{title} and userid=#{userid}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
